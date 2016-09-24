@@ -32,7 +32,8 @@ module.exports = (function() {
           elemInfo.width <= 1
         )
       ) {
-        hideFocuser(event);
+        currentElem = null;
+        focusElem.classList.remove('-focus');
       } else {
         focusElem.style.height = (elemInfo.height + 6) + 'px';
         focusElem.style.width = (elemInfo.width + 6) + 'px';
