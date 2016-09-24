@@ -2,6 +2,7 @@ module.exports = (function() {
 
   var currentElem = null;
   var focusElem = null;
+  var focusElemPadding = 5;
 
   /*
     --------------------
@@ -35,10 +36,10 @@ module.exports = (function() {
         currentElem = null;
         focusElem.classList.remove('-focus');
       } else {
-        focusElem.style.height = (elemInfo.height + 6) + 'px';
-        focusElem.style.width = (elemInfo.width + 6) + 'px';
-        focusElem.style.left = (elemInfo.left + window.pageXOffset - 3) + 'px';
-        focusElem.style.top = (elemInfo.top + window.pageYOffset - 3) + 'px';
+        focusElem.style.height = (elemInfo.height + (focusElemPadding * 2)) + 'px';
+        focusElem.style.width = (elemInfo.width + (focusElemPadding * 2)) + 'px';
+        focusElem.style.left = (elemInfo.left + window.pageXOffset - focusElemPadding) + 'px';
+        focusElem.style.top = (elemInfo.top + window.pageYOffset - focusElemPadding) + 'px';
         focusElem.classList.add('-focus');
       }
     }
