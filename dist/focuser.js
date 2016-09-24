@@ -62,39 +62,78 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = (function() {
 
-	  var focuser = document.createElement('div');
-	  focuser.classList.add('a11y-focuser');
-	  document.body.appendChild(focuser);
+	  var currentElem = null;
+	  var focusElem = null;
 
-	  var updateFocuser = function(event) {
-	    var elem = event.target;
+	  /*
+	    --------------------
+	    Set up
+	    --------------------
+	  */
 
-	    if (
-	      elem.nodeName.toLowerCase() === 'body' ||
-	      elem.nodeName.toLowerCase() === 'div' ||
-	      elem.nodeName.toLowerCase() === 'form' ||
-	      elem.nodeName.toLowerCase() === 'main' ||
-	      elem.nodeName.toLowerCase() === 'nav'
-	    ) {
-	      hideFocuser(event);
-	    } else {
-	      var elemInfo = elem.getBoundingClientRect();
+	  var createFocuser = function() {
+	    focusElem = document.createElement('div');
+	    focusElem.classList.add('a11y-focuser');
 
-	      focuser.style.height = (elemInfo.height + 6) + 'px';
-	      focuser.style.width = (elemInfo.width + 6) + 'px';
-	      focuser.style.left = (elemInfo.left + window.pageXOffset - 3) + 'px';
-	      focuser.style.top = (elemInfo.top + window.pageYOffset - 3) + 'px';
-	      focuser.classList.add('-focus');
+	    document.body.appendChild(focusElem);
+	  };
+
+	  var updateFocuser = function() {
+	    if (currentElem) {
+	      var elemInfo = currentElem.getBoundingClientRect();
+
+	      if (
+	        (
+	          currentElem.nodeName.toLowerCase() === 'body' ||
+	          currentElem.nodeName.toLowerCase() === 'div' ||
+	          currentElem.nodeName.toLowerCase() === 'form' ||
+	          currentElem.nodeName.toLowerCase() === 'main' ||
+	          currentElem.nodeName.toLowerCase() === 'nav'
+	        ) || (
+	          elemInfo.height <= 1 &&
+	          elemInfo.width <= 1
+	        )
+	      ) {
+	        hideFocuser(event);
+	      } else {
+	        focusElem.style.height = (elemInfo.height + 6) + 'px';
+	        focusElem.style.width = (elemInfo.width + 6) + 'px';
+	        focusElem.style.left = (elemInfo.left + window.pageXOffset - 3) + 'px';
+	        focusElem.style.top = (elemInfo.top + window.pageYOffset - 3) + 'px';
+	        focusElem.classList.add('-focus');
+	      }
 	    }
+
+	    requestAnimationFrame(updateFocuser);
 	  };
 
-	  var hideFocuser = function(event) {
-	    var elem = event.target;
-	    focuser.classList.remove('-focus');
+
+	  /*
+	    --------------------
+	    Events
+	    --------------------
+	  */
+
+	  var toggleFocuser = function(event) {
+	    currentElem = (event.type === 'focusin') ? event.target : null;
+	    focusElem.classList[(event.type === 'focusin') ? 'add' : 'remove']('-focus');
 	  };
 
-	  window.addEventListener('focusin', updateFocuser);
-	  window.addEventListener('focusout', hideFocuser);
+	  var addListeners = function() {
+	    window.addEventListener('focusin', toggleFocuser);
+	    window.addEventListener('focusout', toggleFocuser);
+	  };
+
+
+	  /*
+	    --------------------
+	    Init
+	    --------------------
+	  */
+
+	  createFocuser();
+	  addListeners();
+	  updateFocuser();
 
 	}());
 

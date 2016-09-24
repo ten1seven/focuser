@@ -1,12 +1,12 @@
 {
-  "name": "what-input",
-  "version": "3.0.0",
-  "homepage": "https://github.com/ten1seven/what-input",
+  "name": "focuser",
+  "version": "1.0.1",
+  "homepage": "https://github.com/ten1seven/focuser",
   "authors": [
     "Jeremy Fields <jeremy.fields@viget.com>"
   ],
-  "description": "A global utility for tracking the current input method (mouse, keyboard or touch).",
-  "main": "dist/what-input.js",
+  "description": "Ditch those ugly focus styles and use Focuser! A stylable, traveling focus indicator.",
+  "main": "dist/focuser.js",
   "keywords": [
     "accessibility",
     "a11y",
@@ -17,12 +17,10 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "bower_components"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/ten1seven/what-input.git"
+    "url": "git://github.com/ten1seven/focuser.git"
   }
 }
