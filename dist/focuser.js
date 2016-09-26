@@ -1,6 +1,6 @@
 /**
  * focuser - Ditch those ugly focus styles and use Focuser! A stylable, traveling focus indicator.
- * @version v1.0.3
+ * @version v1.0.4
  * @link https://github.com/ten1seven/focuser
  * @license MIT
  */
