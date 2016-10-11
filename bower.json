@@ -1,6 +1,6 @@
 {
   "name": "focuser",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Ditch those ugly focus styles and use Focuser! A stylable, traveling focus indicator.",
   "main": "dist/focuser.js",
   "repository": {

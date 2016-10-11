@@ -1,6 +1,6 @@
 /**
  * focuser - Ditch those ugly focus styles and use Focuser! A stylable, traveling focus indicator.
- * @version v1.0.4
+ * @version v1.0.5
  * @link https://github.com/ten1seven/focuser
  * @license MIT
  */
@@ -60,8 +60,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports) {
 
-	module.exports = (function() {
+	'use strict';
 
+	module.exports = function () {
 	  // object containing the focuser's current dimensions
 	  var focuserBox = {
 	    width: 0,
@@ -72,13 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // block-level elements
 	  // that should not receive a focus indicator
-	  var formInputs = [
-	    'body',
-	    'div',
-	    'form',
-	    'main',
-	    'nav'
-	  ];
+	  var formInputs = ['body', 'div', 'form', 'main', 'nav'];
 
 	  // empty variable for holding the curretly-focused element
 	  var currentElem = null;
@@ -98,42 +93,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	    --------------------
 	  */
 
-	  var createFocuser = function() {
+	  var createFocuser = function createFocuser() {
 	    focuserElem = document.createElement('div');
 	    focuserElem.classList.add('a11y-focuser');
 
 	    document.body.appendChild(focuserElem);
 	  };
 
-	  var updateFocuser = function() {
+	  var updateFocuser = function updateFocuser() {
 	    if (isFocused && currentElem) {
 	      var elemInfo = currentElem.getBoundingClientRect();
 
 	      // reasons to stop an active focuser
 	      if (
 
-	        // if the current element is one of the block level elements
-	        (formInputs.indexOf(currentElem.nodeName.toLowerCase()) !== -1) ||
+	      // if the current element is one of the block level elements
+	      formInputs.indexOf(currentElem.nodeName.toLowerCase()) !== -1 ||
 
-	        // OR the element is less than 1px in height and width
-	        // this catches elements that may be using accessible techniques for hidden content
-	        // via: https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
-	        (
-	          elemInfo.height <= 1 &&
-	          elemInfo.width <= 1
-	        )
-	      ) {
+	      // OR the element is less than 1px in height and width
+	      // this catches elements that may be using accessible techniques for hidden content
+	      // via: https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
+	      elemInfo.height <= 1 && elemInfo.width <= 1) {
 	        stopFocuser();
 
-	      // only update the focuser element if
-	      // the dimensions have changed to save on processing
-	      } else if (
-	        focuserBox.width !== elemInfo.width ||
-	        focuserBox.height !== elemInfo.height ||
-	        focuserBox.top !== elemInfo.top ||
-	        focuserBox.left !== elemInfo.left
-	      ) {
-
+	        // only update the focuser element if
+	        // the dimensions have changed to save on processing
+	      } else if (focuserBox.width !== elemInfo.width || focuserBox.height !== elemInfo.height || focuserBox.top !== elemInfo.top || focuserBox.left !== elemInfo.left) {
 	        // save the current dimensions for comparison
 	        focuserBox.width = elemInfo.width;
 	        focuserBox.height = elemInfo.height;
@@ -141,16 +126,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        focuserBox.left = elemInfo.left;
 
 	        // set the style on the focuser
-	        focuserElem.style.width = (elemInfo.width + (focuserElemPadding * 2)) + 'px';
-	        focuserElem.style.height = (elemInfo.height + (focuserElemPadding * 2)) + 'px';
-	        focuserElem.style.top = (elemInfo.top + window.pageYOffset - focuserElemPadding) + 'px';
-	        focuserElem.style.left = (elemInfo.left + window.pageXOffset - focuserElemPadding) + 'px';
+	        focuserElem.style.width = elemInfo.width + focuserElemPadding * 2 + 'px';
+	        focuserElem.style.height = elemInfo.height + focuserElemPadding * 2 + 'px';
+	        focuserElem.style.top = elemInfo.top + window.pageYOffset - focuserElemPadding + 'px';
+	        focuserElem.style.left = elemInfo.left + window.pageXOffset - focuserElemPadding + 'px';
 	      }
 
-	      requestAnimationFrame(updateFocuser);
+	      window.requestAnimationFrame(updateFocuser);
 	    }
 	  };
-
 
 	  /*
 	    --------------------
@@ -158,7 +142,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    --------------------
 	  */
 
-	  var startFocuser = function(event) {
+	  var startFocuser = function startFocuser(event) {
 	    isFocused = true;
 	    currentElem = event.target;
 
@@ -167,18 +151,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    updateFocuser();
 	  };
 
-	  var stopFocuser = function() {
+	  var stopFocuser = function stopFocuser() {
 	    isFocused = false;
 	    currentElem = null;
 
 	    focuserElem.classList.remove('-focus');
 	  };
 
-	  var addListeners = function() {
+	  var addListeners = function addListeners() {
 	    document.body.addEventListener('focusin', startFocuser);
 	    document.body.addEventListener('focusout', stopFocuser);
 	  };
-
 
 	  /*
 	    --------------------
@@ -189,9 +172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  createFocuser();
 	  addListeners();
 	  updateFocuser();
-
-	}());
-
+	}();
 
 /***/ }
 /******/ ])
