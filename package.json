@@ -4,7 +4,7 @@
   "description": "Ditch those ugly focus styles and use Focuser! A stylable, traveling focus indicator.",
   "main": "dist/focuser.js",
   "repository": {
-    "url": "https://github.com/ten1seven/focuser.git",
+    "url": "git@github.com:ten1seven/focuser.git",
     "type": "git"
   },
   "keywords": [
@@ -15,24 +15,18 @@
   ],
   "author": "Jeremy Fields <jeremy.fields@viget.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ten1seven/focuser/issues"
-  },
-  "scripts": {
-    "start": "gulp"
-  },
   "homepage": "https://github.com/ten1seven/focuser",
-  "devDependencies": {
-    "browser-sync": "2.11.1",
-    "del": "2.2.0",
-    "gulp": "3.9.1",
-    "gulp-concat": "2.6.0",
-    "gulp-header": "1.7.1",
-    "gulp-notify": "2.2.0",
-    "gulp-plumber": "1.1.0",
-    "gulp-rename": "1.2.2",
+  "dependencies": {
+    "browser-sync": "^2.17.2",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-header": "^1.8.8",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
     "gulp-uglify": "^2.0.0",
-    "run-sequence": "1.1.5",
-    "webpack-stream": "3.2.0"
+    "run-sequence": "^1.2.2",
+    "webpack-stream": "^3.2.0"
   }
 }
