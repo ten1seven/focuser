@@ -7,40 +7,8 @@
 
     <title>Focuser</title>
 
-    <link
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-      rel="stylesheet">
-
-    <style>
-      *,
-      *:focus {
-        outline: none !important;
-      }
-
-      .form-control:focus {
-        border-color: #ccc;
-        box-shadow: none;
-      }
-
-      .a11y-focuser {
-        border: 2px solid orange;
-        border-radius: 4px;
-        box-shadow: 0 0 12px 2px orange;
-        pointer-events: none;
-        position: absolute;
-        transition:
-          height .2s ease,
-          width .2s ease,
-          top .2s ease,
-          left .2s ease;
-        visibility: hidden;
-        z-index: 1000;
-      }
-
-      .a11y-focuser.-focus {
-        visibility: visible;
-      }
-    </style>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="index.css" rel="stylesheet">
 
     <!--[if lte IE 8]>
       <script src="lte-IE8.js"></script>
