@@ -4,8 +4,8 @@
   "description": "Ditch those ugly focus styles and use Focuser! A stylable, traveling focus indicator.",
   "main": "dist/focuser.js",
   "repository": {
-    "type": "git",
-    "url": "https://github.com/ten1seven/focuser.git"
+    "url": "https://github.com/ten1seven/focuser.git",
+    "type": "git"
   },
   "keywords": [
     "accessibility",

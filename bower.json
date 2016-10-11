@@ -2,9 +2,11 @@
   "name": "focuser",
   "version": "1.0.4",
   "homepage": "https://github.com/ten1seven/focuser",
-  "authors": [
-    "Jeremy Fields <jeremy.fields@viget.com>"
-  ],
+  "repository": {
+    "url": "https://github.com/ten1seven/focuser.git",
+    "type": "git"
+  },
+  "author": "Jeremy Fields <jeremy.fields@viget.com>",
   "description": "Ditch those ugly focus styles and use Focuser! A stylable, traveling focus indicator.",
   "main": "dist/focuser.js",
   "keywords": [
@@ -18,9 +20,5 @@
     "**/.*",
     "node_modules",
     "bower_components"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/ten1seven/focuser.git"
-  }
+  ]
 }
