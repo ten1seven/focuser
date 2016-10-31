@@ -16,7 +16,7 @@
   "author": "Jeremy Fields <jeremy.fields@viget.com>",
   "license": "MIT",
   "homepage": "https://github.com/ten1seven/focuser",
-  "dependencies": {
+  "devDependencies": {
     "babel-core": "^6.17.0",
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.16.0",
