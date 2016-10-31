@@ -154,20 +154,20 @@ gulp.task('default', () => {
         server: {
           baseDir: './'
         }
-      });
+      })
 
       gulp.watch([
         './src/scripts/focuser.js',
         './src/scripts/polyfills/*.js'
-      ], ['scripts']).on('change', browserSync.reload);
+      ], ['scripts']).on('change', browserSync.reload)
 
       gulp.watch([
         './src/styles/*.pcss'
-      ], ['styles']).on('change', browserSync.reload);
+      ], ['styles']).on('change', browserSync.reload)
 
       gulp.watch([
         './*.html',
-      ]).on('change', browserSync.reload);
+      ]).on('change', browserSync.reload)
     }
   )
 })
