@@ -39,7 +39,7 @@ module.exports = (function () {
     focuserElem = document.createElement('div')
     focuserElem.classList.add('a11y-focuser')
 
-    document.body.appendChild(focuserElem)
+    document.documentElement.appendChild(focuserElem)
   }
 
   const updateFocuser = function () {

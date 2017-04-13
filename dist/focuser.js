@@ -1,6 +1,6 @@
 /**
  * focuser - Ditch those ugly focus styles and use Focuser! A stylable, traveling focus indicator.
- * @version v1.0.5
+ * @version v1.0.6
  * @link https://github.com/ten1seven/focuser
  * @license MIT
  */
@@ -58,7 +58,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	'use strict';
 
@@ -97,7 +97,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    focuserElem = document.createElement('div');
 	    focuserElem.classList.add('a11y-focuser');
 
-	    document.body.appendChild(focuserElem);
+	    document.documentElement.appendChild(focuserElem);
 	  };
 
 	  var updateFocuser = function updateFocuser() {
@@ -174,7 +174,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  updateFocuser();
 	}();
 
-/***/ }
+/***/ })
 /******/ ])
 });
 ;
