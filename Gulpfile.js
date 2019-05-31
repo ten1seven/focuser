@@ -1,173 +1,174 @@
-const banner            = ['/**',
+/*
+ * load plugins
+ */
+
+const pkg = require('./package.json')
+
+const banner = [
+  '/**',
   ' * <%= pkg.name %> - <%= pkg.description %>',
   ' * @version v<%= pkg.version %>',
   ' * @link <%= pkg.homepage %>',
   ' * @license <%= pkg.license %>',
   ' */',
-  ''].join('\n')
-const browserSync       = require('browser-sync').create()
-const concat            = require('gulp-concat')
-const cssnext           = require('postcss-cssnext')
-const csswring          = require('csswring')
-const del               = require('del')
-const gulp              = require('gulp')
-const header            = require('gulp-header')
-const notify            = require('gulp-notify')
-const pkg               = require('./package.json')
-const plumber           = require('gulp-plumber')
-const postcss           = require('gulp-postcss')
-const rename            = require('gulp-rename')
-const reporter          = require('postcss-reporter')
-const runSequence       = require('run-sequence')
-const standard          = require('gulp-standard')
-const stylelint         = require('stylelint')
-const stylelintStandard = require('stylelint-config-standard')
-const uglify            = require('gulp-uglify')
-const webpack           = require('webpack-stream')
+  ''
+].join('\n')
 
-/*
-  --------------------
-  Clean task
-  --------------------
-*/
+// gulp
+const gulp = require('gulp')
 
-gulp.task('clean', function () {
-  return del(['**/.DS_Store'])
+// load all plugins in "devDependencies" into the letiable $
+const $ = require('gulp-load-plugins')({
+  pattern: ['*'],
+  scope: ['devDependencies']
 })
 
 /*
-  --------------------
-  Scripts tasks
-  --------------------
-*/
+ * clean task
+ */
 
-gulp.task('scripts:standard', () => {
-  return gulp.src(['./src/scripts/focuser.js'])
-    .pipe(standard())
-    .pipe(standard.reporter('default', {
-      breakOnError: true,
-      quiet: false
-    }))
-})
-
-gulp.task('scripts:main', () => {
-  return gulp.src(['./src/scripts/focuser.js'])
-    .pipe(webpack({
-      module: {
-        loaders: [{
-          test: /.jsx?$/,
-          loader: 'babel-loader',
-          exclude: /node_modules/,
-          query: {
-            presets: ['es2015']
-          }
-        }]
-      },
-      output: {
-        chunkFilename: '[name].js',
-        library: 'focuser',
-        libraryTarget: 'umd',
-        umdNamedDefine: true
-      }
-    }))
-    .pipe(rename('focuser.js'))
-    .pipe(header(banner, { pkg : pkg } ))
-    .pipe(gulp.dest('./dist/'))
-    .pipe(uglify())
-    .pipe(rename({
-      suffix: '.min'
-    }))
-    .pipe(header(banner, { pkg : pkg } ))
-    .pipe(gulp.dest('./dist/'))
-    .pipe(notify('Build complete'))
-})
-
-gulp.task('scripts:polyfill', () => {
-  return gulp.src(['./src/scripts/polyfills/*.js'])
-    .pipe(plumber({
-      errorHandler: notify.onError("Error: <%= error.message %>")
-    }))
-    .pipe(uglify())
-    .pipe(gulp.dest('./dist/'))
-    .pipe(notify('Polyfill scripts task complete'))
-})
-
-gulp.task('scripts:ie8', () => {
-  return gulp.src(['./src/scripts/polyfills/ie8/*.js'])
-    .pipe(plumber({
-      errorHandler: notify.onError("Error: <%= error.message %>")
-    }))
-    .pipe(concat('lte-IE8.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest('./dist/'))
-    .pipe(notify('IE8 scripts task complete'))
-})
-
-gulp.task('scripts', [
-  'scripts:standard',
-  'scripts:main',
-  'scripts:polyfill',
-  'scripts:ie8'
-])
-
-/*
-  --------------------
-  Style tasks
-  --------------------
-*/
-
-gulp.task('styles', () => {
-  var processors = [
-    stylelint(stylelintStandard),
-    reporter({
-      clearMessages: true
-    }),
-    cssnext({browsers: ['last 3 versions', '> 1%', 'ie >= 9']}),
-    csswring
-  ];
-
-  return gulp.src(['./src/styles/*.pcss'])
-    .pipe(plumber({
-      errorHandler: notify.onError("Error: <%= error.message %>")
-    }))
-    .pipe(postcss(processors))
-    .pipe(rename('index.css'))
-    .pipe(gulp.dest('./'))
-    .pipe(notify('Styles task complete'))
+gulp.task('clean', () => {
+  return $.del(['**/.DS_Store', './build/*', './dist/*'])
 })
 
 /*
-  --------------------
-  Default task
-  --------------------
-*/
+ * scripts tasks
+ */
 
-gulp.task('default', () => {
-  runSequence(
-    'clean',
-    [
-      'scripts',
-      'styles'
-    ],
-    () => {
-      browserSync.init({
-        server: {
-          baseDir: './'
+gulp.task('scripts', () => {
+  return gulp
+    .src(['./src/scripts/focuser.js'])
+    .pipe($.standard())
+    .pipe(
+      $.standard.reporter('default', {
+        breakOnError: false,
+        quiet: true
+      })
+    )
+    .pipe(
+      $.webpackStream({
+        module: {
+          loaders: [
+            {
+              test: /.jsx?$/,
+              loader: 'babel-loader',
+              exclude: /node_modules/,
+              query: {
+                presets: ['env']
+              }
+            }
+          ]
+        },
+        output: {
+          chunkFilename: '[name].js',
+          library: 'focuser',
+          libraryTarget: 'umd',
+          umdNamedDefine: true
         }
       })
+    )
+    .pipe($.rename('focuser.js'))
+    .pipe($.header(banner, { pkg: pkg }))
+    .pipe(gulp.dest('./dist/'))
+    .pipe(gulp.dest('./build/scripts/'))
+    .pipe($.sourcemaps.init())
+    .pipe($.uglify())
+    .pipe(
+      $.rename({
+        suffix: '.min'
+      })
+    )
+    .pipe($.header(banner, { pkg: pkg }))
+    .pipe($.sourcemaps.write('./maps'))
+    .pipe(gulp.dest('./dist/'))
+    .pipe($.notify('Build complete'))
+})
 
-      gulp.watch([
-        './src/scripts/focuser.js',
-        './src/scripts/polyfills/*.js'
-      ], ['scripts']).on('change', browserSync.reload)
+/*
+ * stylesheets
+ */
 
-      gulp.watch([
-        './src/styles/*.pcss'
-      ], ['styles']).on('change', browserSync.reload)
+gulp.task('styles', () => {
+  let processors = [
+    $.autoprefixer({
+      browsers: ['last 3 versions', '> 1%', 'ie >= 10']
+    }),
+    $.cssMqpacker({
+      sort: true
+    })
+  ]
 
-      gulp.watch([
-        './*.html',
-      ]).on('change', browserSync.reload)
-    }
-  )
+  return gulp
+    .src(['./src/styles/index.scss'])
+    .pipe(
+      $.plumber({
+        errorHandler: $.notify.onError('Error: <%= error.message %>')
+      })
+    )
+    .pipe($.sourcemaps.init())
+    .pipe($.sassGlob())
+    .pipe($.sass())
+    .pipe($.postcss(processors))
+    .pipe(
+      $.cssnano({
+        minifySelectors: false,
+        reduceIdents: false,
+        zindex: false
+      })
+    )
+    .pipe($.sourcemaps.write('maps'))
+    .pipe(gulp.dest('./build/styles'))
+    .pipe($.browserSync.stream())
+    .pipe($.notify('Styles task complete'))
+})
+
+/*
+ * images task
+ */
+
+gulp.task('images', () => {
+  return gulp.src(['./src/images/**/*']).pipe(gulp.dest('./build/images'))
+})
+
+/*
+ * markup task
+ */
+
+gulp.task('markup', () => {
+  return gulp.src(['./src/markup/*']).pipe(gulp.dest('./build'))
+})
+
+/*
+ * deploy task
+ */
+
+gulp.task('deploy', () => {
+  return gulp.src('./build/**/*').pipe($.ghPages())
+})
+
+/*
+ * default task
+ */
+
+gulp.task('default', () => {
+  $.runSequence('clean', ['markup', 'scripts', 'styles', 'images'], () => {
+    $.browserSync.init({
+      server: {
+        baseDir: './build/'
+      }
+    })
+
+    gulp
+      .watch(
+        ['./src/scripts/focuser.js', './src/scripts/polyfills/*.js'],
+        ['scripts']
+      )
+      .on('change', $.browserSync.reload)
+
+    gulp.watch(['./src/styles/{,*/}{,*/}*.scss'], ['styles'])
+
+    gulp
+      .watch(['./src/markup/*.html'], ['markup'])
+      .on('change', $.browserSync.reload)
+  })
 })

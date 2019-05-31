@@ -1,4 +1,4 @@
-module.exports = (function () {
+module.exports = (() => {
   // object containing the focuser's current dimensions
   let focuserBox = {
     width: 0,
@@ -24,25 +24,26 @@ module.exports = (function () {
   let focuserElem = null
 
   // extra "padding" between focuser and the element it's focusing
-  const focuserElemPadding = 5
+  const focuserElemPadding = 0
 
   // boolean containing whether something is currently focused
   let isFocused = false
 
-  /*
-    --------------------
-    Set up
-    --------------------
-  */
+  /**
+   * Set up
+   */
 
-  const createFocuser = function () {
+  const createFocuser = () => {
     focuserElem = document.createElement('div')
     focuserElem.classList.add('a11y-focuser')
 
-    document.documentElement.appendChild(focuserElem)
+    document.body.appendChild(focuserElem)
+
+    // set attribute on body to indicate that focuser is available
+    document.body.setAttribute('data-focuser', '')
   }
 
-  const updateFocuser = function () {
+  const updateFocuser = () => {
     if (isFocused && currentElem) {
       let elemInfo = currentElem.getBoundingClientRect()
 
@@ -87,13 +88,11 @@ module.exports = (function () {
     }
   }
 
-  /*
-    --------------------
-    Events
-    --------------------
-  */
+  /**
+   * Events
+   */
 
-  const startFocuser = function (event) {
+  const startFocuser = (event) => {
     isFocused = true
     currentElem = event.target
 
@@ -102,25 +101,23 @@ module.exports = (function () {
     updateFocuser()
   }
 
-  const stopFocuser = function () {
+  const stopFocuser = () => {
     isFocused = false
     currentElem = null
 
     focuserElem.classList.remove('-focus')
   }
 
-  const addListeners = function () {
+  const addListeners = () => {
     document.body.addEventListener('focusin', startFocuser)
     document.body.addEventListener('focusout', stopFocuser)
   }
 
-  /*
-    --------------------
-    Init
-    --------------------
-  */
+  /**
+   * Init
+   */
 
   createFocuser()
   addListeners()
   updateFocuser()
-}())
+})()
